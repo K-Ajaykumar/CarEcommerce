@@ -1,0 +1,155 @@
+<div class="payment-container">
+  <h2>Payment Information</h2>
+  
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    <div class="summary-details">
+      <p>Total Items: {{ cartItemCount$ | async }}</p>
+      <p>Total Amount: ${{ cartTotal$ | async | number:'1.2-2' }}</p>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="orderPlaced" class="success-message">
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <h3>Order Placed Successfully!</h3>
+    <p>Thank you for your purchase. Your order has been received and is being processed.</p>
+    
+    <div class="order-details">
+      <h4>Order Details</h4>
+      <div class="items-list">
+        <div *ngFor="let item of cartItems" class="order-item">
+          <span class="item-name">{{ item.make }} {{ item.model }} ({{ item.year }})</span>
+          <span class="item-quantity">x{{ item.quantity }}</span>
+          <span class="item-price">${{ item.totalPrice | number:'1.2-2' }}</span>
+        </div>
+      </div>
+      <div class="order-total">
+        <strong>Total Amount:</strong>
+        <span>${{ orderTotal | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" (click)="continueShopping()">Continue Shopping</button>
+  </div>
+
+  <!-- Payment Form -->
+  <form *ngIf="!orderPlaced" [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
+    <h3>Payment Details</h3>
+    
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div class="form-group">
+      <label>Card Type</label>
+      <div class="card-type-selector">
+        <label class="card-type-option">
+          <input type="radio" formControlName="cardType" value="credit">
+          <span class="card-type-label">Credit Card</span>
+        </label>
+        <label class="card-type-option">
+          <input type="radio" formControlName="cardType" value="debit">
+          <span class="card-type-label">Debit Card</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="cardNumber">Card Number</label>
+      <input 
+        id="cardNumber" 
+        type="text" 
+        formControlName="cardNumber"
+        placeholder="1234 5678 9012 3456"
+        [class.error]="isFieldInvalid('cardNumber')"
+        maxlength="16"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('cardNumber')">
+        Valid 16-digit card number is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="cardholderName">Cardholder Name</label>
+      <input 
+        id="cardholderName" 
+        type="text" 
+        formControlName="cardholderName"
+        placeholder="Name as it appears on card"
+        [class.error]="isFieldInvalid('cardholderName')"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('cardholderName')">
+        Cardholder name is required
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="expiryMonth">Expiry Month</label>
+        <input 
+          id="expiryMonth" 
+          type="text" 
+          formControlName="expiryMonth"
+          placeholder="MM"
+          [class.error]="isFieldInvalid('expiryMonth')"
+          maxlength="2"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('expiryMonth')">
+          Valid month (01-12) is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="expiryYear">Expiry Year</label>
+        <input 
+          id="expiryYear" 
+          type="text" 
+          formControlName="expiryYear"
+          placeholder="YYYY"
+          [class.error]="isFieldInvalid('expiryYear')"
+          maxlength="4"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('expiryYear')">
+          Valid 4-digit year is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input 
+          id="cvv" 
+          type="text" 
+          formControlName="cvv"
+          placeholder="123"
+          [class.error]="isFieldInvalid('cvv')"
+          maxlength="4"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('cvv')">
+          Valid CVV is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="saveCard">
+        <span>Save this card for future purchases</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="secondary" (click)="goBack()">Back to Checkout</button>
+      <button type="submit" [disabled]="paymentForm.invalid || isProcessing">
+        <span *ngIf="!isProcessing">Place Order</span>
+        <span *ngIf="isProcessing" class="spinner"></span>
+      </button>
+    </div>
+  </form>
+</div> 

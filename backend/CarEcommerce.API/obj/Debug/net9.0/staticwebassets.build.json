@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "pBtJ17kxt2MOiNobrGCZ8nxJ26qvEAtV2Fgveb443H4=",
+  "Source": "CarEcommerce.API",
+  "BasePath": "_content/CarEcommerce.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

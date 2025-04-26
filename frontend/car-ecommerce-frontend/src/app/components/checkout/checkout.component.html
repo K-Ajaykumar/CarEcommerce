@@ -1,0 +1,113 @@
+<div class="checkout-container">
+  <h2>Checkout</h2>
+  
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    <div class="summary-details">
+      <p>Total Items: {{ cartItemCount$ | async }}</p>
+      <p>Total Amount: ${{ cartTotal$ | async | number:'1.2-2' }}</p>
+    </div>
+  </div>
+
+  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="checkout-form">
+    <h3>Billing Address</h3>
+    
+    <div class="form-group">
+      <label for="fullName">Full Name</label>
+      <input 
+        id="fullName" 
+        type="text" 
+        formControlName="fullName"
+        [class.error]="isFieldInvalid('fullName')"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('fullName')">
+        Full name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="addressLine1">Address Line 1</label>
+      <input 
+        id="addressLine1" 
+        type="text" 
+        formControlName="addressLine1"
+        [class.error]="isFieldInvalid('addressLine1')"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('addressLine1')">
+        Address is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="addressLine2">Address Line 2 (Optional)</label>
+      <input 
+        id="addressLine2" 
+        type="text" 
+        formControlName="addressLine2"
+      >
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="city">City</label>
+        <input 
+          id="city" 
+          type="text" 
+          formControlName="city"
+          [class.error]="isFieldInvalid('city')"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('city')">
+          City is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="state">State</label>
+        <input 
+          id="state" 
+          type="text" 
+          formControlName="state"
+          [class.error]="isFieldInvalid('state')"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('state')">
+          State is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="zipCode">ZIP Code</label>
+        <input 
+          id="zipCode" 
+          type="text" 
+          formControlName="zipCode"
+          [class.error]="isFieldInvalid('zipCode')"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('zipCode')">
+          Valid ZIP code is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input 
+          id="phone" 
+          type="tel" 
+          formControlName="phone"
+          [class.error]="isFieldInvalid('phone')"
+        >
+        <div class="error-message" *ngIf="isFieldInvalid('phone')">
+          Valid phone number is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="secondary" (click)="goBack()">Back to Cart</button>
+      <button type="submit" [disabled]="checkoutForm.invalid || (cartTotal$ | async) === 0">
+        Proceed to Payment
+      </button>
+    </div>
+  </form>
+</div> 

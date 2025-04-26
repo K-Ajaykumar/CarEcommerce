@@ -1,0 +1,57 @@
+<div class="cart-container">
+  <h2>Shopping Cart</h2>
+  
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Empty Cart Message -->
+  <div *ngIf="!isLoading && items.length === 0" class="empty-cart">
+    <p>Your cart is empty</p>
+    <button class="btn btn-primary" (click)="continueShopping()">Continue Shopping</button>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="!isLoading && items.length > 0" class="cart-items">
+    <div class="cart-item" *ngFor="let item of items">
+      <div class="item-details">
+        <div class="car-info">
+          <h3>{{ item.make }} {{ item.model }}</h3>
+          <p class="year">Year: {{ item.year }}</p>
+          <p class="price">Unit Price: ${{ item.price | number:'1.2-2' }}</p>
+        </div>
+        <div class="quantity-section">
+          <div class="quantity-controls">
+            <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, -1)" [disabled]="item.quantity <= 1">-</button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, 1)">+</button>
+          </div>
+          <div class="item-total">
+            <p>Item Total: ${{ item.totalPrice | number:'1.2-2' }}</p>
+          </div>
+          <button class="btn btn-danger btn-sm" (click)="removeItem(item)">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary">
+      <div class="subtotal">
+        <h4>Cart Total: ${{ getCartTotal() | number:'1.2-2' }}</h4>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" (click)="continueShopping()">Continue Shopping</button>
+        <button class="btn btn-danger" (click)="clearCart()">Clear Cart</button>
+        <button class="btn btn-primary" (click)="checkout()">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+</div> 

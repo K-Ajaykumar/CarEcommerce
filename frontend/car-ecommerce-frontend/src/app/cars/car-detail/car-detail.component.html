@@ -1,0 +1,50 @@
+<div class="car-detail-container" *ngIf="car">
+  <div class="car-image">
+    <img [src]="car.imageUrl" [alt]="car.make + ' ' + car.model" (error)="onImageError($event)">
+  </div>
+  <div class="car-info">
+    <h1>{{car.make}} {{car.model}}</h1>
+    <p class="description">{{car.description}}</p>
+    <p class="price">${{car.price | number:'1.0-0'}}</p>
+    
+    <div class="specifications">
+      <h2>Specifications</h2>
+      <div class="spec-grid">
+        <div class="spec-item" *ngIf="car.engineType">
+          <span class="label">Engine Type:</span>
+          <span class="value">{{car.engineType}}</span>
+        </div>
+        <div class="spec-item" *ngIf="car.transmission">
+          <span class="label">Transmission:</span>
+          <span class="value">{{car.transmission}}</span>
+        </div>
+        <div class="spec-item" *ngIf="car.mileage">
+          <span class="label">Mileage:</span>
+          <span class="value">{{car.mileage}} miles</span>
+        </div>
+        <div class="spec-item" *ngIf="car.color">
+          <span class="label">Color:</span>
+          <span class="value">{{car.color}}</span>
+        </div>
+        <div class="spec-item" *ngIf="car.stockQuantity">
+          <span class="label">Stock:</span>
+          <span class="value">{{car.stockQuantity}} available</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <button 
+      class="add-to-cart-btn" 
+      (click)="addToCart()" 
+      [disabled]="isLoading"
+      [class.loading]="isLoading"
+    >
+      <span *ngIf="!isLoading">Add to Cart</span>
+      <span *ngIf="isLoading">Adding to Cart...</span>
+    </button>
+  </div>
+</div> 
